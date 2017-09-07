@@ -59,7 +59,7 @@ check_pid_client(){
 }
 Download_Server_Status_server(){
 	cd "/usr/local"
-	wget -N --no-check-certificate "https://github.com/ToyoDAdoubi/ServerStatus-Toyo/archive/master.zip"
+	wget -N --no-check-certificate "https://github.com/huangts/ServerStatus-Toyo/archive/master.zip"
 	[[ ! -e "master.zip" ]] && echo -e "${Error} ServerStatus 服务端下载失败 !" && exit 1
 	unzip master.zip && rm -rf master.zip
 	[[ ! -e "ServerStatus-Toyo-master" ]] && echo -e "${Error} ServerStatus 服务端解压失败 !" && exit 1
@@ -78,21 +78,21 @@ Download_Server_Status_client(){
 	cd "/usr/local"
 	[[ ! -e ${file} ]] && mkdir "${file}"
 	cd "${file}"
-	wget -N --no-check-certificate "https://raw.githubusercontent.com/91yun/ServerStatus-1/master/clients/client-linux.py"
+	wget -N --no-check-certificate "https://raw.githubusercontent.com/huangts/ServerStatus-Toyo/master/clients/client-linux.py"
 	[[ ! -e "client-linux.py" ]] && echo -e "${Error} ServerStatus 客户端下载失败 !" && exit 1
 	mv client-linux.py status-client.py
 	[[ ! -e "status-client.py" ]] && echo -e "${Error} ServerStatus 服务端文件夹重命名失败 !" && rm -rf client-linux.py && exit 1
 }
 Service_Server_Status_server(){
 	if [[ ${release} = "centos" ]]; then
-		if ! wget --no-check-certificate "https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/other/server_status_server_centos" -O /etc/init.d/status-server; then
+		if ! wget --no-check-certificate "https://raw.githubusercontent.com/huangts/doubi/master/other/server_status_server_centos" -O /etc/init.d/status-server; then
 			echo -e "${Error} ServerStatus 服务端服务管理脚本下载失败 !" && exit 1
 		fi
 		chmod +x /etc/init.d/status-server
 		chkconfig --add status-server
 		chkconfig status-server on
 	else
-		if ! wget --no-check-certificate "https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/other/server_status_server_debian" -O /etc/init.d/status-server; then
+		if ! wget --no-check-certificate "https://raw.githubusercontent.com/huangts/doubi/master/other/server_status_server_debian" -O /etc/init.d/status-server; then
 			echo -e "${Error} ServerStatus 服务端服务管理脚本下载失败 !" && exit 1
 		fi
 		chmod +x /etc/init.d/status-server
@@ -102,14 +102,14 @@ Service_Server_Status_server(){
 }
 Service_Server_Status_client(){
 	if [[ ${release} = "centos" ]]; then
-		if ! wget --no-check-certificate "https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/other/server_status_client_centos" -O /etc/init.d/status-client; then
+		if ! wget --no-check-certificate "https://raw.githubusercontent.com/huangts/doubi/master/other/server_status_client_centos" -O /etc/init.d/status-client; then
 			echo -e "${Error} ServerStatus 客户端服务管理脚本下载失败 !" && exit 1
 		fi
 		chmod +x /etc/init.d/status-client
 		chkconfig --add status-client
 		chkconfig status-client on
 	else
-		if ! wget --no-check-certificate "https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/other/server_status_client_debian" -O /etc/init.d/status-client; then
+		if ! wget --no-check-certificate "https://raw.githubusercontent.com/huangts/doubi/master/other/server_status_client_debian" -O /etc/init.d/status-client; then
 			echo -e "${Error} ServerStatus 客户端服务管理脚本下载失败 !" && exit 1
 		fi
 		chmod +x /etc/init.d/status-client
@@ -192,7 +192,7 @@ Set_server(){
 		stty erase '^H' && read -p "(默认: 127.0.0.1):" server_s
 		[[ -z "$server_s" ]] && server_s="127.0.0.1"
 	fi
-	
+
 	echo && echo "	================================================"
 	echo -e "	IP/域名[server]: ${Red_background_prefix} ${server_s} ${Font_color_suffix}"
 	echo "	================================================" && echo
@@ -285,7 +285,7 @@ Set_config_client(){
 Set_ServerStatus_server(){
 	check_installed_server_status
 	echo && echo -e " 你要做什么？
-	
+
  ${Green_font_prefix} 1.${Font_color_suffix} 添加 节点配置
  ${Green_font_prefix} 2.${Font_color_suffix} 删除 节点配置
 ————————
@@ -535,7 +535,7 @@ Install_jq(){
 		fi
 		[[ ! -e ${jq_file} ]] && echo -e "${Error} JQ解析器 下载失败，请检查 !" && exit 1
 		chmod +x ${jq_file}
-		echo -e "${Info} JQ解析器 安装完成，继续..." 
+		echo -e "${Info} JQ解析器 安装完成，继续..."
 	else
 		echo -e "${Info} JQ解析器 已安装，继续..."
 	fi
@@ -546,7 +546,7 @@ Install_caddy(){
 	[[ -z "$caddy_yn" ]] && caddy_yn="y"
 	if [[ "${caddy_yn}" == [Yy] ]]; then
 		if [[ ! -e "/usr/local/caddy/caddy" ]]; then
-			wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/caddy_install.sh
+			wget -N --no-check-certificate https://raw.githubusercontent.com/huangts/doubi/master/caddy_install.sh
 			chmod +x caddy_install.sh
 			bash caddy_install.sh install
 			[[ ! -e "/usr/local/caddy/caddy" ]] && echo -e "${Error} Caddy安装失败，请手动部署，Web网页文件位置：${Web_file}" && exit 0
@@ -721,12 +721,12 @@ View_ServerStatus_client(){
 	Read_config_client
 	clear && echo "————————————————————" && echo
 	echo -e "  ServerStatus 客户端配置信息：
- 
+
   IP \t: ${Green_font_prefix}${client_server}${Font_color_suffix}
   端口 \t: ${Green_font_prefix}${client_port}${Font_color_suffix}
   账号 \t: ${Green_font_prefix}${client_user}${Font_color_suffix}
   密码 \t: ${Green_font_prefix}${client_password}${Font_color_suffix}
- 
+
 ————————————————————"
 }
 View_client_Log(){
@@ -774,18 +774,18 @@ post-down iptables-save > /etc/iptables.up.rules" >> /etc/network/interfaces
 }
 Update_Shell(){
 	echo -e "当前版本为 [ ${sh_ver} ]，开始检测最新版本..."
-	sh_new_ver=$(wget --no-check-certificate -qO- "https://softs.fun/Bash/status.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1) && sh_new_type="softs"
-	[[ -z ${sh_new_ver} ]] && sh_new_ver=$(wget --no-check-certificate -qO- "https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/status.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1) && sh_new_type="github"
+	sh_new_ver=$(wget --no-check-certificate -qO- "https://111.com/status.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1) && sh_new_type="111"
+	[[ -z ${sh_new_ver} ]] && sh_new_ver=$(wget --no-check-certificate -qO- "https://raw.githubusercontent.com/huangts/doubi/master/status.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1) && sh_new_type="github"
 	[[ -z ${sh_new_ver} ]] && echo -e "${Error} 检测最新版本失败 !" && exit 0
 	if [[ ${sh_new_ver} != ${sh_ver} ]]; then
 		echo -e "发现新版本[ ${sh_new_ver} ]，是否更新？[Y/n]"
 		stty erase '^H' && read -p "(默认: y):" yn
 		[[ -z "${yn}" ]] && yn="y"
 		if [[ ${yn} == [Yy] ]]; then
-			if [[ $sh_new_type == "softs" ]]; then
-				wget -N --no-check-certificate https://softs.fun/Bash/status.sh && chmod +x status.sh
+			if [[ $sh_new_type == "111" ]]; then
+				wget -N --no-check-certificate https://111.com/status.sh && chmod +x status.sh
 			else
-				wget -N --no-check-certificate https://raw.githubusercontent.com/ToyoDAdoubi/doubi/master/status.sh && chmod +x status.sh
+				wget -N --no-check-certificate https://raw.githubusercontent.com/huangts/doubi/master/status.sh && chmod +x status.sh
 			fi
 			echo -e "脚本已更新为最新版本[ ${sh_new_ver} ] !"
 		else
@@ -798,7 +798,7 @@ Update_Shell(){
 menu_client(){
 echo && echo -e "  ServerStatus 一键安装管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
   -- Toyo | doub.io/shell-jc3 --
-  
+
  ${Green_font_prefix}0.${Font_color_suffix} 升级脚本
  ————————————
  ${Green_font_prefix}1.${Font_color_suffix} 安装 客户端
@@ -864,7 +864,7 @@ esac
 menu_server(){
 echo && echo -e "  ServerStatus 一键安装管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
   -- Toyo | doub.io/shell-jc3 --
-  
+
  ${Green_font_prefix}0.${Font_color_suffix} 升级脚本
  ————————————
  ${Green_font_prefix}1.${Font_color_suffix} 安装 服务端
