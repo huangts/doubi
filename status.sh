@@ -189,8 +189,10 @@ Set_server(){
 		[[ -z "$server_s" ]] && server_s=""
 	else
 		echo -e "请输入 ServerStatus 服务端的 IP/域名[server]"
-		stty erase '^H' && read -p "(默认: 127.0.0.1):" server_s
-		[[ -z "$server_s" ]] && server_s="127.0.0.1"
+		#stty erase '^H' && read -p "(默认: 127.0.0.1):" server_s
+    stty erase '^H' && read -p "(默认: *):" server_s
+		#[[ -z "$server_s" ]] && server_s="127.0.0.1"
+		[[ -z "$server_s" ]] && server_s="119.23.42.143"
 	fi
 
 	echo && echo "	================================================"
@@ -240,8 +242,10 @@ Set_password(){
 	else
 		echo -e "请输入 ServerStatus 服务端中对应配置的密码[password]（字母/数字）"
 	fi
-	stty erase '^H' && read -p "(默认: doub.io):" password_s
-	[[ -z "$password_s" ]] && password_s="doub.io"
+	#stty erase '^H' && read -p "(默认: doub.io):" password_s
+	stty erase '^H' && read -p "(默认: *):" password_s
+	#[[ -z "$password_s" ]] && password_s="doub.io"
+  [[ -z "$password_s" ]] && password_s="Hubpz8FL"
 	echo && echo "	================================================"
 	echo -e "	密码[password]: ${Red_background_prefix} ${password_s} ${Font_color_suffix}"
 	echo "	================================================" && echo
