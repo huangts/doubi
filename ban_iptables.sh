@@ -4,11 +4,11 @@ export PATH
 #=================================================
 #       System Required: CentOS/Debian/Ubuntu
 #       Description: iptables 封禁 BT、PT、SPAM（垃圾邮件）和自定义端口、关键词
-#       Version: 1.0.7
+#       Version: 1.0.8
 #       Blog: https://doub.io/shell-jc2/
 #=================================================
 
-sh_ver="1.0.7"
+sh_ver="1.0.8"
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
 Info="${Green_font_prefix}[信息]${Font_color_suffix}"
 Error="${Red_font_prefix}[错误]${Font_color_suffix}"
@@ -28,7 +28,6 @@ BitTorrent
 announce_peer
 BitTorrent protocol
 announce.php?passkey=
-bt.
 magnet:"
 
 check_sys(){
@@ -94,31 +93,15 @@ Save_iptables_v4_v6(){
 		fi
 		service iptables save
 		chkconfig --level 2345 iptables on
-	elif [[ ${release} == "debian" ]]; then
+	else
 		if [[ ! -z "$v6iptables" ]]; then
 			ip6tables-save > /etc/ip6tables.up.rules
-			echo -e "#!/bin/bash
-/sbin/iptables-restore < /etc/iptables.up.rules
-/sbin/ip6tables-restore < /etc/ip6tables.up.rules" > /etc/network/if-pre-up.d/iptables
+			echo -e "#!/bin/bash\n/sbin/iptables-restore < /etc/iptables.up.rules\n/sbin/ip6tables-restore < /etc/ip6tables.up.rules" > /etc/network/if-pre-up.d/iptables
 		else
-			echo -e "#!/bin/bash
-/sbin/iptables-restore < /etc/iptables.up.rules" > /etc/network/if-pre-up.d/iptables
+			echo -e "#!/bin/bash\n/sbin/iptables-restore < /etc/iptables.up.rules" > /etc/network/if-pre-up.d/iptables
 		fi
 		iptables-save > /etc/iptables.up.rules
 		chmod +x /etc/network/if-pre-up.d/iptables
-	elif [[ ${release} == "ubuntu" ]]; then
-		if [[ ! -z "$v6iptables" ]]; then
-			ip6tables-save > /etc/ip6tables.up.rules
-		echo -e "pre-up iptables-restore < /etc/iptables.up.rules
-post-down iptables-save > /etc/iptables.up.rules
-pre-up ip6tables-restore < /etc/ip6tables.up.rules
-post-down ip6tables-save > /etc/ip6tables.up.rules" >> /etc/network/interfaces
-		else
-			echo -e "pre-up iptables-restore < /etc/iptables.up.rules
-post-down iptables-save > /etc/iptables.up.rules" >> /etc/network/interfaces
-		fi
-		iptables-save > /etc/iptables.up.rules
-		chmod +x /etc/network/interfaces
 	fi
 }
 Set_key_word() { $1 -t mangle -$3 OUTPUT -m string --string "$2" --algo bm --to 65535 -j DROP; }
@@ -373,6 +356,7 @@ UnBan_KEY_WORDS_ALL(){
 		do
 			${v4iptables} -t mangle -D OUTPUT 1
 	done
+	Save_iptables_v4_v6
 	View_ALL
 	echo -e "${Info} 已解封所有关键词 !"
 }
