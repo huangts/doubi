@@ -1,23 +1,22 @@
 #!/bin/bash
 # chkconfig: 2345 90 10
-# description: Cloud Torrent: a self-hosted remote torrent client
+# description: GoFlyway
 
 ### BEGIN INIT INFO
-# Provides:          Cloud-Torrent
+# Provides:          GoFlyway
 # Required-Start:    $network $syslog
 # Required-Stop:     $network
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Cloud Torrent: a self-hosted remote torrent client
-# Description:       Start or stop the Cloud Torrent
+# Short-Description: Lightweight HTTP proxy tool
+# Description:       Start or stop the GoFlyway
 ### END INIT INFO
 
-NAME="Cloud Torrent"
-NAME_BIN="cloud-torrent"
-FILE="/etc/cloudtorrent"
-BIN="${FILE}/cloud-torrent"
-CONFIG="${FILE}/cloud-torrent.json"
-CONF="${FILE}/cloud-torrent.conf"
+NAME="GoFlyway"
+NAME_BIN="goflyway"
+FILE="/usr/local/goflyway"
+CONF="${FILE}/goflyway.conf"
+LOG="${FILE}/goflyway.log"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
 Info="${Green_font_prefix}[信息]${Font_color_suffix}"
@@ -25,7 +24,7 @@ Error="${Red_font_prefix}[错误]${Font_color_suffix}"
 RETVAL=0
 
 check_running(){
-	PID=`ps -ef |grep "${NAME_BIN}" |grep -v "grep" |grep -v "init.d" |grep -v "service" |awk '{print $2}'`
+	PID=`ps -ef |grep "${NAME_BIN}" |grep -v "grep" | grep -v ".sh"| grep -v "init.d" |grep -v "service" |awk '{print $2}'`
 	if [[ ! -z ${PID} ]]; then
 		return 0
 	else
@@ -33,9 +32,8 @@ check_running(){
 	fi
 }
 read_config(){
-	[[ ! -e ${CONF} ]] && echo -e "${Error} Cloud Torrent 配置文件不存在 !" && exit 1
+	[[ ! -e ${CONF} ]] && echo -e "${Error} GoFlyway 配置文件不存在 !" && exit 1
 	port=`cat ${CONF}|grep "port"|awk -F "=" '{print $NF}'`
-	user=`cat ${CONF}|grep "user"|awk -F "=" '{print $NF}'`
 	passwd=`cat ${CONF}|grep "passwd"|awk -F "=" '{print $NF}'`
 }
 View_User(){
@@ -49,19 +47,12 @@ View_User(){
 			fi
 		fi
 	fi
-	if [[ -z ${user} ]]; then
-		clear && echo "————————————————" && echo
-		echo -e " 你的 Cloud Torrent 信息 :" && echo
-		echo -e " 地址\t: ${Green_font_prefix}http://${ip}:${port}${Font_color_suffix}"
-		echo && echo "————————————————"
-	else
-		clear && echo "————————————————" && echo
-		echo -e " 你的 Cloud Torrent 信息 :" && echo
-		echo -e " 地址\t: ${Green_font_prefix}http://${ip}:${port}${Font_color_suffix}"
-		echo -e " 用户\t: ${Green_font_prefix}${user}${Font_color_suffix}"
-		echo -e " 密码\t: ${Green_font_prefix}${passwd}${Font_color_suffix}"
-		echo && echo "————————————————"
-	fi
+	clear && echo "————————————————" && echo
+	echo -e " GoFlyway 信息 :" && echo
+	echo -e " 地址\t: ${Green_font_prefix}${ip}${Font_color_suffix}"
+	echo -e " 端口\t: ${Green_font_prefix}${port}${Font_color_suffix}"
+	echo -e " 密码\t: ${Green_font_prefix}${passwd}${Font_color_suffix}"
+	echo && echo "————————————————"
 }
 do_start(){
 	check_running
@@ -71,11 +62,7 @@ do_start(){
 		read_config
 		cd ${FILE}
 		echo -e "${Info} $NAME 启动中..."
-		if [[ -z ${user} ]]; then
-			./cloud-torrent -t "Cloud Torrent - 逗比根据地" -p ${port} -l >> ct.log 2>&1 &
-		else
-			./cloud-torrent -t "Cloud Torrent - 逗比根据地" -p ${port} -l -a "${user}:${passwd}" >> ct.log 2>&1 &
-		fi
+		nohup ./goflyway -k="${passwd}" -l=":${port}" > "${LOG}" 2>&1 &
 		sleep 2s
 		check_running
 		if [[ $? -eq 0 ]]; then

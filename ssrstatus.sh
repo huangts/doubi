@@ -100,8 +100,8 @@ set_config_method(){
  ${Green_font_prefix}15.${Font_color_suffix} chacha20
  ${Green_font_prefix}16.${Font_color_suffix} chacha20-ietf
  ${Tip} salsa20/chacha20-*系列加密方式，需要额外安装依赖 libsodium ，否则会无法启动ShadowsocksR !" && echo
-	stty erase '^H' && read -p "(默认: 5. aes-128-ctr):" method
-	[[ -z "${method}" ]] && method="5"
+	stty erase '^H' && read -p "(默认: 10. aes-256-cfb):" method
+	[[ -z "${method}" ]] && method="10"
 	if [[ ${method} == "1" ]]; then
 		method="none"
 	elif [[ ${method} == "2" ]]; then
@@ -146,8 +146,8 @@ set_config_protocol(){
  ${Green_font_prefix}3.${Font_color_suffix} auth_aes128_md5
  ${Green_font_prefix}4.${Font_color_suffix} auth_aes128_sha1
  ${Green_font_prefix}5.${Font_color_suffix} auth_chain_a" && echo
-	stty erase '^H' && read -p "(默认: 2. auth_sha1_v4):" protocol
-	[[ -z "${protocol}" ]] && protocol="2"
+	stty erase '^H' && read -p "(默认: 1. origin):" protocol
+	[[ -z "${protocol}" ]] && protocol="1"
 	if [[ ${protocol} == "1" ]]; then
 		protocol="origin"
 	elif [[ ${protocol} == "2" ]]; then

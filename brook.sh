@@ -254,19 +254,19 @@ Start_brook(){
 	check_installed_status
 	check_pid
 	[[ ! -z ${PID} ]] && echo -e "${Error} Brook 正在运行，请检查 !" && exit 1
-	service brook start
+	/etc/init.d/brook start
 }
 Stop_brook(){
 	check_installed_status
 	check_pid
 	[[ -z ${PID} ]] && echo -e "${Error} Brook 没有运行，请检查 !" && exit 1
-	service brook stop
+	/etc/init.d/brook stop
 }
 Restart_brook(){
 	check_installed_status
 	check_pid
-	[[ ! -z ${PID} ]] && service brook stop
-	service brook start
+	[[ ! -z ${PID} ]] && /etc/init.d/brook stop
+	/etc/init.d/brook start
 }
 Update_brook(){
 	check_installed_status
@@ -335,18 +335,10 @@ Set_iptables(){
 	if [[ ${release} == "centos" ]]; then
 		service iptables save
 		chkconfig --level 2345 iptables on
-	elif [[ ${release} == "debian" ]]; then
+	else
 		iptables-save > /etc/iptables.up.rules
-		cat > /etc/network/if-pre-up.d/iptables<<-EOF
-#!/bin/bash
-/sbin/iptables-restore < /etc/iptables.up.rules
-EOF
+		echo -e '#!/bin/bash\n/sbin/iptables-restore < /etc/iptables.up.rules' > /etc/network/if-pre-up.d/iptables
 		chmod +x /etc/network/if-pre-up.d/iptables
-	elif [[ ${release} == "ubuntu" ]]; then
-		iptables-save > /etc/iptables.up.rules
-		echo -e "\npre-up iptables-restore < /etc/iptables.up.rules
-post-down iptables-save > /etc/iptables.up.rules" >> /etc/network/interfaces
-		chmod +x /etc/network/interfaces
 	fi
 }
 Update_Shell(){
@@ -430,7 +422,7 @@ case "$num" in
 	8)
 	View_brook
 	;;
-	8)
+	9)
 	View_Log
 	;;
 	*)
