@@ -192,7 +192,7 @@ Set_server(){
 		#stty erase '^H' && read -p "(默认: 127.0.0.1):" server_s
                 stty erase '^H' && read -p "(默认: *):" server_s
 		#[[ -z "$server_s" ]] && server_s="127.0.0.1"
-		[[ -z "$server_s" ]] && server_s="119.23.42.143"
+		[[ -z "$server_s" ]] && server_s="119.23.222.153"
 	fi
 
 	echo && echo "	================================================"
@@ -204,7 +204,7 @@ Set_server_port(){
 		do
 		echo -e "请输入 ServerStatus 服务端中网站要设置的 域名/IP的端口[1-65535]（如果是域名的话，一般建议用 80 端口）"
 		stty erase '^H' && read -p "(默认: 8888):" server_port_s
-		[[ -z "$server_port_s" ]] && server_port_s="8888"
+		[[ -z "$server_port_s" ]] && server_port_s="35601"
 		expr ${server_port_s} + 0 &>/dev/null
 		if [[ $? -eq 0 ]]; then
 			if [[ ${server_port_s} -ge 1 ]] && [[ ${server_port_s} -le 65535 ]]; then
@@ -252,8 +252,8 @@ Set_password(){
 }
 Set_name(){
 	echo -e "请输入 ServerStatus 服务端要设置的节点名称[name]（支持中文，前提是你的系统和SSH工具支持中文输入，仅仅是个名字）"
-	stty erase '^H' && read -p "(默认: Server 01):" name_s
-	[[ -z "$name_s" ]] && name_s="Server 01"
+	stty erase '^H' && read -p "(默认: 中国01):" name_s
+	[[ -z "$name_s" ]] && name_s="中国01"
 	echo && echo "	================================================"
 	echo -e "	节点名称[name]: ${Red_background_prefix} ${name_s} ${Font_color_suffix}"
 	echo "	================================================" && echo
