@@ -192,7 +192,7 @@ Set_server(){
 		#stty erase '^H' && read -p "(默认: 127.0.0.1):" server_s
                 stty erase '^H' && read -p "(默认: *):" server_s
 		#[[ -z "$server_s" ]] && server_s="127.0.0.1"
-		[[ -z "$server_s" ]] && server_s="119.23.222.153"
+		[[ -z "$server_s" ]] && server_s="monitor.rayku.net"
 	fi
 
 	echo && echo "	================================================"
